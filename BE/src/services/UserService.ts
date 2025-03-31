@@ -40,6 +40,23 @@ export class UserService {
     return token;
   }
 
-  
+  async ResetPassWord(
+    user_id: any,
+    password: string
+  ): Promise<{ message: string }> {
+    const user = await UserModel.findById(user_id);
+    if (!user) {
+      throw new Error(`User không Tồn Tại!!!`);
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    return {
+      message: "Đổi mật khẩu thành công",
+    };
+  }
 }
 
