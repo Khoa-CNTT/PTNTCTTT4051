@@ -1,1 +1,1 @@
-# QuanLyPhongTro_KhoaLuan
+# PHÁT TRIỂN NỀN TẢNG CHO THUÊ TRỌ THÔNG MINH TÍCH HỢP IoT & TỰ ĐỘNG HÓA GIAO DỊCH
