@@ -63,3 +63,20 @@ export const login = async (req: Request, res: Response) => {
 };
 
 
+export const verifypassword = async (req: Request, res: Response) => {
+  try {
+    const { User } = req as any;
+    const { New_password, confirm_Password } = req.body;
+
+    if (New_password !== confirm_Password) {
+      return res.status(400).json({ message: "Mật khẩu xác nhận không khớp." });
+    }
+    const result = await userService.ResetPassWord(User._id, New_password);
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(500).json({
+      message: "Đã xảy ra lỗi khi đổi mật khẩu.",
+      error: error.message,
+    });
+  }
+};
