@@ -23,7 +23,6 @@ const Item = [
   {
     id: 4,
     name: "Tìm kiếm",
-    Navigate: "/Search",
   },
 ];
 
