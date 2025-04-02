@@ -20,7 +20,19 @@ export const getAccesstoken = async (payload: {
   return token;
 };
 
-
+export const SignTokenRestPassWord = async (payload: {
+  _id: Types.ObjectId;
+  verify: UserVerifyStatus;
+}) => {
+  const token = jwt.sign(
+    payload,
+    process.env.JWT_SECRET_FORGOT_PASSWORD_TOKEN as string,
+    {
+      // expiresIn: '10m',
+    }
+  );
+  return token;
+};
 //giải mã tokentoken
 export const verifyToken = async (
   token: string,
@@ -48,3 +60,4 @@ export const signverifyEmailToken = async (payload: {
   );
   return token;
 };
+

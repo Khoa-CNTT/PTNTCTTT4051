@@ -2,6 +2,7 @@ import UserModel from "../models/UserModel";
 import bcrypt from "bcryptjs";
 import {
   getAccesstoken,
+  SignTokenRestPassWord,
   signverifyEmailToken,
 
 } from "../utils/getAccesstoken";
@@ -40,6 +41,17 @@ export class UserService {
     return token;
   }
 
+  async forgotPassword(
+    user_id: any,
+    verify: UserVerifyStatus
+  ): Promise<string> {
+    const forgot_password_token = await SignTokenRestPassWord({
+      _id: user_id,
+      verify: verify,
+    });
+    return forgot_password_token;
+  }
+  
   async ResetPassWord(
     user_id: any,
     password: string
