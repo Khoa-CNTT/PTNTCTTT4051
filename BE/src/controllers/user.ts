@@ -62,6 +62,26 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+export const sendPassword = async (req: Request, res: Response) => {
+  try {
+    const { user } = req as any;
+    const result = await userService.forgotPassword(user._id, user.verify);
+    const mailOptions = {
+      from: process.env.MAIL_USERNAME,
+      to: user.email,
+      subject: "Xác thực tài khoản của bạn để đổi mật khẩu",
+      text: `Chào ${user.username}, vui lòng xác thực tài khoản của bạn bằng cách nhấp vào liên kết sau: ${process.env.CLIENT_ORIGIN}/reset-password?token=${result}`,
+    };
+    // Gửi email
+    await transporter.sendMail(mailOptions);
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(500).json({
+      message: "Đã xảy ra lỗi khi gửi mail.",
+      error: error.message,
+    });
+  }
+};
 
 export const verifypassword = async (req: Request, res: Response) => {
   try {
