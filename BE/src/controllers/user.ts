@@ -41,19 +41,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: "Login successfully!!!",
-      data: {
-        token,
-        user: {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-          hovaten: user.ho_va_ten,
-          ngaysinh: user.ngay_sinh,
-          sdt: user.so_dien_thoai,
-          gioi_tinh: user.gioi_tinh,
-          cccd: user.cccd,
-        },
-      },
+      token: token, // Trả về token cho người dùng
     });
   } catch (error: any) {
     res.status(404).json({

@@ -4,8 +4,6 @@ import mongoose from "mongoose";
 import userRouter from "./routers/user";
 import cors from "cors";
 import { createServer } from "http";
-import router from "./routers/user";
-
 
 dotenv.config();
 
@@ -33,8 +31,6 @@ const connectDB = async () => {
     console.log(`Can not connect to db ${error}`);
   }
 };
-
-app.use("/api", router);
 
 connectDB()
   .then(() => {
