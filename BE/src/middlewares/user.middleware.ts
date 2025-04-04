@@ -46,3 +46,18 @@ export const LoginValidator = async (req: any, res: any, next: any) => {
         return res.status(500).json({ message: 'Đã xảy ra lỗi trong quá trình xác thực.', error: error.message });
     }
 };
+
+export const forgotPasswordValidator = async (req:any,res:any,next:any) =>{
+    try {
+        const email =req.body
+        console.log(email)
+        const resuil =await UserModel.findOne(email)
+        if(!resuil){
+            return res.status(400).json({ message: 'Email không đúng!!!' });
+        }
+       req.user = resuil
+       next();
+    } catch (error:any) {
+        return res.status(500).json({ message: 'Đã xảy ra lỗi trong quá trình xác thực.', error: error.message });
+    }
+}
