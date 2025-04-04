@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { axiosInstance } from "../../../Axios";
 
 const UserResendForgot = () => {
   const [email, setEmail] = useState("");
@@ -13,10 +14,20 @@ const UserResendForgot = () => {
     setIsError(false);
 
     try {
+      await axiosInstance.post(
+        "/auth/resend-forgot-password",
+        { email },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       setMessage("Email xác thực đã được gửi thành công!");
       setEmail("");
     } catch (error) {
       setIsError(true);
+      setMessage(
+        error.response?.data?.message || "Đã xảy ra lỗi trong quá trình xử lý."
+      );
     } finally {
       setIsLoading(false);
     }
