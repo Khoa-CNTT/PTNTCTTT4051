@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { useNavigate, useSearchParams } from "react-router";
+import { axiosInstance } from "../../../Axios";
 
 export default function VerifySuccess() {
   const [searchParams] = useSearchParams();
@@ -13,6 +14,12 @@ export default function VerifySuccess() {
       setStatus("error");
       return;
     }
+    axiosInstance
+      .post("/auth/verify_Email", {
+        email_verify_token: token,
+      }) // Gửi token lên server
+      .then(() => setStatus("success"))
+      .catch(() => setStatus("error"));
   }, []);
 
   return (
