@@ -61,3 +61,20 @@ export const forgotPasswordValidator = async (req:any,res:any,next:any) =>{
         return res.status(500).json({ message: 'Đã xảy ra lỗi trong quá trình xác thực.', error: error.message });
     }
 }
+
+export const ResetPasswordValidator = async(req:any,res:any,next:any) =>{
+    try {
+        const {Forgot_Password_Token, New_password, confirm_Password} =req.body;
+        if(!Forgot_Password_Token || !New_password || !confirm_Password){
+            throw new Error('Vui lòng nhập đầy đủ thông tin')
+        }
+        const decoded =await verifyToken(Forgot_Password_Token,process.env.JWT_SECRET_FORGOT_PASSWORD_TOKEN as string )
+        if (!decoded) {
+            return res.status(401).json({ message: "Token không hợp lệ hoặc đã hết hạn." });
+        }
+        req.User =decoded
+        next(); 
+    } catch (error:any) {
+        return res.status(500).json({ message: 'Đã xảy ra lỗi trong quá trình xác thực.', error: error.message }); 
+    }  
+} 
