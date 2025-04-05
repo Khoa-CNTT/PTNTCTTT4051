@@ -88,3 +88,73 @@ export const verifypassword = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { user } = req as any;
+    const data = req.body;
+    await userService.updateUserService(user._id, data);
+
+    res.status(200).json({
+      message: "user đã được cập nhật thành công",
+    });
+  } catch (error: any) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
+};
+export const getMe = async (req: any, res: any) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(404).json({ message: "Người dùng không tồn tại." });
+    }
+
+    const data = await userService.getMe(user._id);
+
+    res.status(200).json({
+      status: 200,
+      data: data,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Lỗi khi lấy thông tin người dùng.",
+      error: error.message,
+    });
+  }
+};
+
+export const getAllUser = async (req: any, res: any) => {
+  try {
+    const data = await userService.getUserAll();
+
+    res.status(200).json({
+      status: 200,
+      data: data,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Lỗi khi lấy thông tin người dùng.",
+      error: error.message,
+    });
+  }
+};
+
+export const getDetailUser = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    const data = await userService.getUserDetail(id);
+    res.status(200).json({
+      status: 200,
+      data: data,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Lỗi khi lấy thông tin người dùng.",
+      error: error.message,
+    });
+  }
+};
+
