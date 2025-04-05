@@ -5,6 +5,7 @@ import userRouter from "./routers/user";
 import cors from "cors";
 import { createServer } from "http";
 import routerPhong from "./routers/phongTro";
+import routeDichVu from "./routers/dichVu";
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.use(
 
 app.use("/auth", userRouter);
 app.use("/phongTro", routerPhong);
+
+app.use("/dich-vu", routeDichVu);
 const connectDB = async () => {
   try {
     await mongoose.connect(dbURL);
