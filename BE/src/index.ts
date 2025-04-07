@@ -7,6 +7,8 @@ import { createServer } from "http";
 import routerPhong from "./routers/phongTro";
 import routeDichVu from "./routers/dichVu";
 import routerThang from "./routers/HoaDonThangRouter";
+import schedule from "node-schedule";
+import { tuDongTaoHoaDonThang } from "./controllers/HoaDonTungThangController";
 
 dotenv.config();
 
@@ -38,6 +40,10 @@ const connectDB = async () => {
     console.log(`Can not connect to db ${error}`);
   }
 };
+
+schedule.scheduleJob("59 23 * * *", () => {
+  tuDongTaoHoaDonThang();
+ });
 
 connectDB()
   .then(() => {
