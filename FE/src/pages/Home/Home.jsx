@@ -5,11 +5,7 @@ import Category from "../../component/Categories/Categories";
 import { usePhongTro } from "../../Context/PhongTroContext";
 import emailhome from "../../assets/phongtroemail.jpg";
 import buiding from "../../assets/bulding.png";
-import { FaRegUserCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { axiosInstance } from "../../../Axios";
-import Slider from "react-slick";
-import { useNavigate } from "react-router";
 
 const slideUpVariants = {
   hidden: { opacity: 0, y: 70 },
@@ -55,10 +51,8 @@ function Homepage() {
       },
     ],
   };
-  const navigate = useNavigate();
   const [listdata, setListdata] = useState([]);
   const { phongTro } = usePhongTro();
-  const [topReview, setTopReview] = useState([]);
   useEffect(() => {
     if (phongTro.length > 0) {
       const sortedBooks = [...phongTro].sort(
@@ -66,19 +60,6 @@ function Homepage() {
       );
       setListdata(sortedBooks);
     }
-    const fetchTopReview = async () => {
-      const res = await axiosInstance.get("/danh_gia/AllTopdanhgia");
-      const filterTopReview = res.data.data.map((item) => ({
-        ...item,
-        noi_dung:
-          item.noi_dung.length > 100
-            ? item.noi_dung.slice(0, 100) + "..."
-            : item.noi_dung,
-      }));
-
-      setTopReview(filterTopReview);
-    };
-    fetchTopReview();
   }, [phongTro]);
   return (
     <div className="w-full">
@@ -170,42 +151,6 @@ function Homepage() {
               limit={10}
               slide={false}
             />
-          </motion.section>
-
-          {/* Đánh giá */}
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={slideUpVariants}
-            className="my-10"
-          >
-            <h3 className="text-[#23274A] font-bold text-2xl">Đánh giá</h3>
-            <Slider {...settings} className="py-5 ">
-              {topReview.map((item, index) => (
-                <div
-                  key={index}
-                  className="w-full md:max-w-[300px] shadow-xl p-5 rounded-lg cursor-pointer h-[380px] my-10"
-                  onClick={() =>
-                    navigate(`/details/${item.phong_info.ma_phong}`)
-                  }
-                >
-                  <div className="flex items-center gap-3">
-                    <FaRegUserCircle size={28} />
-                    <h3 className="text-lg font-semibold">
-                      {item.user_info.username}
-                    </h3>
-                  </div>
-                  <span className="text-yellow-500 text-lg">★★★★★</span>
-                  <img
-                    src={item.phong_info.anh_phong}
-                    alt=""
-                    className="mt-4 w-[400px] h-[200px] object-cover"
-                  />
-                  <p className="text-gray-700 text-sm mt-4">{item.noi_dung}</p>
-                </div>
-              ))}
-            </Slider>
           </motion.section>
 
           {/* Đăng ký nhận tin tức */}
