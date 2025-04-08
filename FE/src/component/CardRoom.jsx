@@ -1,6 +1,7 @@
 import "react-toastify/dist/ReactToastify.css";
 import test from "../assets/test.png";
 import { FaArrowsAlt, FaUserFriends } from "react-icons/fa";
+import { useNavigate } from "react-router";
 function CardRoom({
   id,
   price,
@@ -13,7 +14,14 @@ function CardRoom({
   province,
   ward,
 }) {
-  const handleCard = async (e) => {};
+  const navigate = useNavigate();
+  const handleCard = async (e) => {
+    try {
+      navigate(`/details/${e}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div
       className="w-full md:max-w-[300px] min-h-[470px] shadow-xl flex flex-col justify-between bg-white p-4 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105"
