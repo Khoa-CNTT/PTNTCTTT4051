@@ -10,6 +10,7 @@ import Search from "../pages/Search/Search";
 import RoomDetails from "../pages/RoomDetails/RoomDetails";
 import Profile from "../pages/profile/Profile";
 import Contract from "../component/hopdong";
+import Favourite from "../pages/Favourite/Favourite";
 
 const routerUser = (
   <Route path="/" element={<Layout />}>
@@ -23,6 +24,7 @@ const routerUser = (
     <Route path="details/:id" element={<RoomDetails />} />
     <Route path="profile" element={<Profile />} />
     <Route path="hopdong/:maphong" element={<Contract />} />
+    <Route path="yeuthich" element={<Favourite />} />
   </Route>
 );
 
