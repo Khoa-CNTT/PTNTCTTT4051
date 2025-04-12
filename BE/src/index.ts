@@ -9,6 +9,7 @@ import routeDichVu from "./routers/dichVu";
 import routerThang from "./routers/HoaDonThangRouter";
 import schedule from "node-schedule";
 import { tuDongTaoHoaDonThang } from "./controllers/HoaDonTungThangController";
+import routeHoaDon from "./routers/hoaDon";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use(
 
 app.use("/auth", userRouter);
 app.use("/phongTro", routerPhong);
+app.use("/hoadon", routeHoaDon);
 
 app.use("/dich-vu", routeDichVu);
 app.use("/hoa-don-thang", routerThang);
