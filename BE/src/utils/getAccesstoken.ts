@@ -20,6 +20,20 @@ export const getAccesstoken = async (payload: {
   return token;
 };
 
+export const getAccesstokenAdmin = async (payload: {
+  _id: Types.ObjectId;
+  verify: UserVerifyStatus;
+}) => {
+  const authorization = jwt.sign(
+    payload,
+    process.env.JWT_SECRET_ACCESS_TOKEN_ADMIN as string,
+    {
+      // expiresIn: '10m',
+    }
+  );
+  return authorization;
+};
+
 export const SignTokenRestPassWord = async (payload: {
   _id: Types.ObjectId;
   verify: UserVerifyStatus;
@@ -60,4 +74,5 @@ export const signverifyEmailToken = async (payload: {
   );
   return token;
 };
+
 
