@@ -52,7 +52,7 @@ export class UserService {
     });
     return forgot_password_token;
   }
-  
+
   async ResetPassWord(
     user_id: any,
     password: string
@@ -254,6 +254,14 @@ export class UserService {
     ]);
 
     return result[0] || null;
+  }
+  async deleteUserService(body: any): Promise<void> {
+    const { id } = body;
+    const delet = await UserModel.findById(id);
+    if (!delet) {
+      throw new Error("Admin không tồn tại");
+    }
+    await UserModel.findByIdAndDelete(id);
   }
 }
 
