@@ -8,8 +8,9 @@ import routerPhong from "./routers/phongTro";
 import routeDichVu from "./routers/dichVu";
 import routerThang from "./routers/HoaDonThangRouter";
 import schedule from "node-schedule";
-import { tuDongTaoHoaDonThang } from "./controllers/HoaDonTungThangController";
+import { tuDongTaoHoaDon, tuDongTaoHoaDonThang } from "./controllers/HoaDonTungThangController";
 import routeHoaDon from "./routers/hoaDon";
+import routerAdmin from "./routers/adminRouter";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(
     credentials: true, // Cho phép gửi cookie
   })
 );
+app.use("/admin", routerAdmin);
 
 app.use("/auth", userRouter);
 app.use("/phongTro", routerPhong);
@@ -44,7 +46,7 @@ const connectDB = async () => {
 };
 
 schedule.scheduleJob("59 23 * * *", () => {
-  tuDongTaoHoaDonThang();
+  tuDongTaoHoaDonThang(), tuDongTaoHoaDon();
  });
 
 connectDB()

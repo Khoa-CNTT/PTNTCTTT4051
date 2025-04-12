@@ -3,6 +3,7 @@ import HoaDonThangService from '../services/HoaDonTungThangService';
 import HoaDonTungThangModel from '../models/HoaDonTungThangModel';
 import UserModel from '../models/UserModel';
 import nodemailer from "nodemailer";
+import HoaDonThanhToanModel from '../models/HoaDonThanhToanModel';
 
 const hoaDonThangService = new HoaDonThangService();
 
@@ -184,6 +185,84 @@ export const tuDongTaoHoaDonThang = async () => {
     }
   } catch (error) {
     console.error("Lỗi khi tự động tạo hóa đơn tháng tiến theo:", error);
+  }
+};
+
+// Hàm tự động tạo hóa đơn tháng đầu tiên cho phòng được thuê
+export const tuDongTaoHoaDon = async () => {
+  try {
+    const danhSachHoaDonMoiNhat = await HoaDonThanhToanModel.aggregate([
+      { $sort: { ngay_chuyen_khoan: -1 } },
+      {
+        $group: {
+          _id: "$ma_phong",
+          hoaDonMoiNhat: { $first: "$$ROOT" },
+        },
+      },
+    ]);
+
+    if (!danhSachHoaDonMoiNhat?.length) {
+      console.log("Chưa có hóa đơn nào trong hệ thống.");
+      return;
+    }
+
+    const ngayHienTai = new Date();
+    const thangHienTai = ngayHienTai.toISOString().slice(0, 7);
+    const ngayCuoiThang = new Date(ngayHienTai.getFullYear(), ngayHienTai.getMonth() + 1, 0, 23, 59, 59, 999);
+
+    const ngươithue = await UserModel.findOne({
+      _id: danhSachHoaDonMoiNhat[0].hoaDonMoiNhat.id_users,
+    });
+    if (ngươithue) {
+      console.log(ngươithue.email);
+    } else {
+      console.log("Người thuê không tồn tại.");
+    }
+
+
+    for (const { hoaDonMoiNhat } of danhSachHoaDonMoiNhat) {
+      const { ma_phong, id_users, trang_thai, ngay_chuyen_khoan } = hoaDonMoiNhat;
+
+      if (!ma_phong || !id_users) {
+        console.log(`Hóa đơn của phòng ${ma_phong} thiếu mã phòng hoặc ID người dùng, bỏ qua.`);
+        continue;
+      }
+
+      const ngayChuyenKhoanCuoi = new Date(ngay_chuyen_khoan);
+      const thangTruoc = new Date(ngayChuyenKhoanCuoi.getFullYear(), ngayChuyenKhoanCuoi.getMonth(), 1)
+        .toISOString()
+        .slice(0, 7);
+
+      const hoaDonDaTonTai = await HoaDonTungThangModel.findOne({
+        ma_phong,
+        ngay_tao_hoa_don: {
+          $gte: new Date(`${thangHienTai}-01T00:00:00Z`),
+          $lte: ngayCuoiThang,
+        },
+      });
+
+      if (trang_thai === "chưa thanh toán") {
+        console.log(`Phòng ${ma_phong} có hóa đơn thuê trọ chưa thanh toán. Yêu cầu thanh toán!.`);
+        continue;
+      }
+
+      if (trang_thai === "đã thanh toán" && thangTruoc < thangHienTai && !hoaDonDaTonTai) {
+        console.log(`Tự động tạo hóa đơn tháng đầu tiên: ${thangHienTai} cho phòng ${ma_phong}`);
+        const newHoaDon = await hoaDonThangService.taoHoaDon(ma_phong, id_users, thangHienTai);
+        
+        // Gửi email
+        await sendEmail(ngươithue, newHoaDon);
+
+
+        console.log(`Hóa đơn tháng đầu tiên: ${thangHienTai} cho phòng ${ma_phong} đã được tạo thành công!`);
+      } else if (hoaDonDaTonTai) {
+        console.log(`Phòng ${ma_phong} đã có hóa đơn tháng đầu tiên.`);
+      } else {
+        console.log(`Đã có hóa đơn của phòng ${ma_phong} là tháng ${thangTruoc}.`);
+      }
+    }
+  } catch (error) {
+    console.error("Lỗi khi tự động tạo hóa đơn tháng đầu tiên:", error);
   }
 };
 
