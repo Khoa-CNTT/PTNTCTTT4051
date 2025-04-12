@@ -22,13 +22,24 @@ function Login() {
         email: email,
         password: password,
       });
-      console.log("res,", res.data.data.user);
-      dispath(
-        login({
-          user: res.data.data.user,
-          token: res.data.data.token,
-        })
-      );
+
+      const token = res.data.token;
+      if (token) {
+        // ✅ Lưu token tạm thời để interceptor có thể dùng
+        localStorage.setItem("token", token);
+
+        // Gọi API lấy thông tin user
+        const users = await axiosInstance.get("auth/me");
+
+        // Cập nhật Redux và localStorage chính thức
+        dispath(
+          login({
+            user: users.data.data,
+            token: token,
+          })
+        );
+      }
+
       navigate("/");
       toast.success("Đăng nhập thành công!");
     } catch (error) {
