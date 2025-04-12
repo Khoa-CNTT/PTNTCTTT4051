@@ -158,3 +158,18 @@ export const getDetailUser = async (req: any, res: any) => {
   }
 };
 
+export const deleteUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    await userService.deleteUserService({ id });
+
+    res.status(200).json({
+      message: "Đã xóa User thành công!",
+    });
+  } catch (error: any) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
+};
+
