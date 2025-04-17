@@ -39,6 +39,7 @@ app.use("/yeu-thich", YeuThichRouter);
 app.use("/thiet-bi", ThietBiRouter)
 app.use("/dich-vu", routeDichVu);
 app.use("/hoa-don-thang", routerThang);
+app.use("/danh_gia", routerDanhGia);
 const connectDB = async () => {
   try {
     await mongoose.connect(dbURL);
