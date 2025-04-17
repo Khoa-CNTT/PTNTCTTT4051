@@ -4,6 +4,7 @@ import {
 import { UserVerifyStatus } from "../constants/enum";
 import AdminModel from "../models/AdminModel";
 import bcrypt from "bcryptjs";
+import { ObjectId } from "mongodb";
 
 export class AdminService {
   async loginAdminService(
@@ -15,5 +16,92 @@ export class AdminService {
       verify: verify,
     });
     return token;
+  }
+
+  async createAdminService(data: any): Promise<void> {
+    const { email, password } = data;
+
+    // Kiểm tra danh mục đã tồn tại chưa
+    const admin = await AdminModel.findOne({ email });
+    if (admin) {
+      throw new Error("Email đã tồn tại");
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashpassword = await bcrypt.hash(password, salt);
+    data.password = hashpassword;
+
+    // Tạo mới danh mục
+    const newAdmin = new AdminModel({ ...data });
+
+    // Lưu danh mục vào cơ sở dữ liệu
+    await newAdmin.save();
+  }
+
+  async updateAdminService(_id: any, data: any): Promise<void> {
+    const id = new ObjectId(_id);
+    const {
+      id_quyen,
+      email,
+      password,
+      username,
+      ho_va_ten,
+      ngay_sinh,
+      verify,
+      que_quan,
+      so_dien_thoai,
+      gioi_tinh,
+      cccd,
+      is_block,
+    } = data;
+
+    // Kiểm tra danh mục cần cập nhật có tồn tại không
+    const update = await AdminModel.findById(id);
+    if (!update) {
+      throw new Error("ID admin không tồn tại");
+    }
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      update.password = await bcrypt.hash(password, salt);
+    }
+
+    update.id_quyen = id_quyen ?? update.id_quyen;
+    update.email = email ?? update.email;
+    update.username = username ?? update.username;
+    update.ho_va_ten = ho_va_ten ?? update.ho_va_ten;
+    update.ngay_sinh = ngay_sinh ?? update.ngay_sinh;
+    update.verify = verify ?? update.verify;
+    update.que_quan = que_quan ?? update.que_quan;
+    update.so_dien_thoai = so_dien_thoai ?? update.so_dien_thoai;
+    update.gioi_tinh = gioi_tinh ?? update.gioi_tinh;
+    update.cccd = cccd ?? update.cccd;
+    update.is_block = is_block ?? update.is_block;
+
+    // Lưu các thay đổi vào cơ sở dữ liệu
+    await update.save();
+  }
+
+  async deleteAdminService(body: any): Promise<void> {
+    const { id } = body;
+    const delet = await AdminModel.findById(id);
+    if (!delet) {
+      throw new Error("Admin không tồn tại");
+    }
+    await AdminModel.findByIdAndDelete(id);
+  }
+
+
+  async getAdmin(user_id: string) {
+    const user = await AdminModel.findOne({
+      _id: new ObjectId(user_id),
+    }).select(" -createdAt -updatedAt -__v"); // Ẩn các trường không cần thiết
+
+    return user;
+  }
+
+  async getAdminAll() {
+    const user = await AdminModel.find().select(" -createdAt -updatedAt -__v"); // Ẩn các trường không cần thiết
+    return user;
   }
 }
