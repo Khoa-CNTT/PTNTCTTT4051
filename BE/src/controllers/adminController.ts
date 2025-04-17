@@ -1,11 +1,19 @@
 import { Request, Response } from "express";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 import { AdminService } from "../services/AdminServiec";
 
 
 dotenv.config();
 
 const adminService = new AdminService();
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.MAIL_USERNAME,
+    pass: process.env.MAIL_PASSWORD,
+  },
+});
 
 export const loginAdmin = async (req: Request, res: Response) => {
   try {
@@ -83,7 +91,50 @@ export const deleteAdmin = async (req: Request, res: Response) => {
     });
   }
 };
+export const sendPasswordAdmin = async (req: Request, res: Response) => {
+  try {
+    const { admin } = req as any;
 
+    const result = await adminService.forgotPasswordAdminService(
+      admin._id,
+      admin.verify
+    );
+    const mailOptions = {
+      from: process.env.MAIL_USERNAME,
+      to: admin.email,
+      subject: "Xác thực tài khoản của bạn để đổi mật khẩu",
+      text: `Chào ${admin.username}, vui lòng xác thực tài khoản của bạn bằng cách nhấp vào liên kết sau: ${process.env.CLIENT_ORIGIN}/admin/reset-password?token=${result}`,
+    };
+    // Gửi email
+    await transporter.sendMail(mailOptions);
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(500).json({
+      message: "Đã xảy ra lỗi khi gửi mail.",
+      error: error.message,
+    });
+  }
+};
+export const resetPasswordAdmin = async (req: Request, res: Response) => {
+  try {
+    const { admin } = req as any;
+    const { New_password, confirm_Password } = req.body;
+
+    if (New_password !== confirm_Password) {
+      return res.status(400).json({ message: "Mật khẩu xác nhận không khớp." });
+    }
+    const result = await adminService.ResetPassWordAdminService(
+      admin._id,
+      New_password
+    );
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(500).json({
+      message: "Đã xảy ra lỗi khi đổi mật khẩu.",
+      error: error.message,
+    });
+  }
+};
 export const getAdmin = async (req: any, res: any) => {
   try {
     const admin = req.admin;

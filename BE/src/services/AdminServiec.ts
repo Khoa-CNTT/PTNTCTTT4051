@@ -1,5 +1,6 @@
 import {
   getAccesstokenAdmin,
+  SignTokenRestPassWord,
 } from "../utils/getAccesstoken";
 import { UserVerifyStatus } from "../constants/enum";
 import AdminModel from "../models/AdminModel";
@@ -90,7 +91,34 @@ export class AdminService {
     }
     await AdminModel.findByIdAndDelete(id);
   }
+  async forgotPasswordAdminService(
+    user_id: any,
+    verify: UserVerifyStatus
+  ): Promise<string> {
+    const forgot_password_token = await SignTokenRestPassWord({
+      _id: user_id,
+      verify: verify,
+    });
+    return forgot_password_token;
+  }
+  async ResetPassWordAdminService(
+    user_id: any,
+    password: string
+  ): Promise<{ message: string }> {
+    const admin = await AdminModel.findById(user_id);
+    if (!admin) {
+      throw new Error(`User không Tồn Tại!!!`);
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
+    admin.password = hashedPassword;
+    await admin.save();
+
+    return {
+      message: "Đổi mật khẩu thành công",
+    };
+  }
 
   async getAdmin(user_id: string) {
     const user = await AdminModel.findOne({
