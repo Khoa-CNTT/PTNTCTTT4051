@@ -11,6 +11,8 @@ import schedule from "node-schedule";
 import { tuDongTaoHoaDon, tuDongTaoHoaDonThang } from "./controllers/HoaDonTungThangController";
 import routeHoaDon from "./routers/hoaDon";
 import routerAdmin from "./routers/adminRouter";
+import YeuThichRouter from "./routers/yeuThich";
+import ThietBiRouter from "./routers/thietBi";
 
 dotenv.config();
 
@@ -33,7 +35,8 @@ app.use("/admin", routerAdmin);
 app.use("/auth", userRouter);
 app.use("/phongTro", routerPhong);
 app.use("/hoadon", routeHoaDon);
-
+app.use("/yeu-thich", YeuThichRouter);
+app.use("/thiet-bi", ThietBiRouter)
 app.use("/dich-vu", routeDichVu);
 app.use("/hoa-don-thang", routerThang);
 const connectDB = async () => {

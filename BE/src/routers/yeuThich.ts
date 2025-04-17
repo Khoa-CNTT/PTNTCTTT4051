@@ -4,8 +4,8 @@ import {
     deleteYeuThich 
 } from "../controllers/yeuThich";
 
-const router = Router();
-router.post("/create", createYeuThich);
-router.delete("/delete/:id_user", deleteYeuThich);
+const YeuThichRouter = Router();
+YeuThichRouter.post("/create", createYeuThich);
+YeuThichRouter.delete("/delete/:id_user", deleteYeuThich);
 
-export default router;
+export default YeuThichRouter;
