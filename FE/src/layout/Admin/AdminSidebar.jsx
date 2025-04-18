@@ -34,12 +34,23 @@ export default function AdminSidebar({ setActiveComponent, activeComponent }) {
   // Danh sách items menu
   const menuItems = [
     {
+      key: "admin",
+      label: "Acc Admin",
+      icon: (
+        <MdOutlineAdminPanelSettings className="2xl:text-xl text-sm transition-transform duration-300 hover:rotate-12" />
+      ),
+    },
+    {
       key: "quanly",
       label: "Quản Lý",
       icon: (
         <MdOutlineAdminPanelSettings className="2xl:text-xl text-sm transition-transform duration-300 hover:rotate-12" />
       ),
-      children: [{ key: "phongtro", label: "Quản lý phòng" }],
+      children: [
+        { key: "phongtro", label: "Quản lý phòng" },
+        { key: "adminuser", label: "Quản lý User" },
+        { key: "danhmuc", label: "Quản lý Danh Mục" },
+      ],
     },
   ];
 
