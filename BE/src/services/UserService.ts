@@ -4,10 +4,13 @@ import {
   getAccesstoken,
   SignTokenRestPassWord,
   signverifyEmailToken,
+  verifyToken,
 
 } from "../utils/getAccesstoken";
 import { UserVerifyStatus } from "../constants/enum";
 import { ObjectId } from "mongodb";
+import axios from "axios";
+import jwkToPemModule from 'jwk-to-pem';
 
 
 export class UserService {
@@ -262,6 +265,53 @@ export class UserService {
       throw new Error("Admin không tồn tại");
     }
     await UserModel.findByIdAndDelete(id);
+  }
+
+  async googleLogin(token: string): Promise<string> {
+    const response = await axios.get("https://www.googleapis.com/oauth2/v3/certs");
+  
+    let payload: any;
+    for (const key of response.data.keys) {
+      try {
+        const pemKey = jwkToPemModule(key);
+        payload = await verifyToken(token, pemKey);
+        break;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log("Key failed:", key.kid, error.message);
+        } else {
+          console.log("Key failed:", key.kid, String(error));
+        }
+        continue;
+      }
+    }
+  
+    if (!payload) {
+      throw new Error("Invalid or unverifiable token");
+    }
+  
+    if (payload.aud !== process.env.GG_CLIENT_ID) {
+      throw new Error("Invalid token: Audience mismatch");
+    }
+  
+    const { email, name, given_name } = payload;
+    let user = await UserModel.findOne({ email });
+    if (!user) {
+      user = new UserModel({ 
+        email: email, 
+        username: name, 
+        password: null, 
+        ho_va_ten: given_name, 
+        verify: UserVerifyStatus.Verified 
+      });
+      await user.save();
+    }
+    const authToken = await getAccesstoken({
+      _id: user._id,
+      verify: user.verify === UserVerifyStatus.Verified ? UserVerifyStatus.Verified : UserVerifyStatus.Unverified
+    });
+  
+    return authToken;
   }
 }
 

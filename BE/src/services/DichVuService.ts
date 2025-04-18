@@ -2,7 +2,6 @@ import DichVuModel from "../models/DichVuModel";
 import { ObjectId } from "mongodb";
 class DichVuService {
   async CreatDichVu(data: any) {
-    console.log("data service", data.tien_dien);
     const dichVu = new DichVuModel({
       tien_dien: data.tien_dien,
       tien_nuoc: data.tien_nuoc,
@@ -25,10 +24,10 @@ class DichVuService {
       throw new Error("DichVu không tồn tại");
     }
     (dichVu.tien_dien = tien_dien ?? dichVu.tien_dien),
-      (dichVu.tien_nuoc = tien_nuoc ?? dichVu.tien_nuoc),
-      (dichVu.tien_wifi = tien_wifi ?? dichVu.tien_wifi),
-      // Lưu các thay đổi vào cơ sở dữ liệu
-      await dichVu.save();
+    (dichVu.tien_nuoc = tien_nuoc ?? dichVu.tien_nuoc),
+    (dichVu.tien_wifi = tien_wifi ?? dichVu.tien_wifi),
+  
+    await dichVu.save();
   }
 
   async GetAllDichVu() {
