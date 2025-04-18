@@ -13,6 +13,7 @@ import routeHoaDon from "./routers/hoaDon";
 import routerAdmin from "./routers/adminRouter";
 import YeuThichRouter from "./routers/yeuThich";
 import ThietBiRouter from "./routers/thietBi";
+import routerDanhGia from "./routers/danhGia";
 
 dotenv.config();
 

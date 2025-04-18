@@ -1,7 +1,9 @@
+import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 import { UserService } from "../services/UserService";
 import { Request, Response } from "express";
 import nodemailer from "nodemailer";
+import UserModel from '../models/UserModel';
 
 dotenv.config();
 const userService = new UserService();
@@ -173,3 +175,33 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+export const loginGoogle = async (req: any, res: any) => {
+  const { token } = req.body;
+
+  try {
+    const authToken = await userService.googleLogin(token);
+    
+    const decoded = jwt.verify(authToken, process.env.JWT_SECRET_ACCESS_TOKEN as string) as { _id: string; verify: string };
+    const user = await UserModel.findById(decoded._id);
+
+    if (!user) {
+      throw new Error("Không tìm thấy người dùng!");
+    }
+
+    return res.status(200).json({
+      message: "Đăng nhập Google thành công!",
+      data: {
+        user: {
+          id: user._id,
+          email: user.email,
+          username: user.username,
+        },
+        token: authToken,
+      },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: "Đăng nhập Google thất bại!",
+    });
+  }
+};
