@@ -9,20 +9,17 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
     const authorization = localStorage.getItem("authorization");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    } else if (authorization) {
-      config.headers.Authorization = `${authorization}`;
-    } else {
-      console.log("token không tồn tại");
+    const token = localStorage.getItem("token");
+    if (authorization) {
+      config.headers.Authorization = authorization;
+    } else if (token) {
+      config.headers.Authorization = token;
     }
+
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export { axiosInstance };
