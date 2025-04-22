@@ -25,17 +25,12 @@ function Login() {
 
       const token = res.data.token;
       if (token) {
-        // ✅ Lưu token tạm thời để interceptor có thể dùng
         localStorage.setItem("token", token);
-
-        // Gọi API lấy thông tin user
         const users = await axiosInstance.get("auth/me");
-
-        // Cập nhật Redux và localStorage chính thức
         dispath(
           login({
-            user: users.data.data,
             token: token,
+            user: users.data.data,
           })
         );
       }
