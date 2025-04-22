@@ -1,6 +1,7 @@
 import AccountAdmin from "../../pages/admin/home/Quanly/AccountAdmin";
 import DanhMucAdmin from "../../pages/admin/home/Quanly/DanhMucAdmin";
 import PhongTroAdmin from "../../pages/admin/home/Quanly/PhongTroAdmin";
+import ThietBiAdmin from "../../pages/admin/home/Quanly/ThietBiAdmin";
 import UserAdmin from "../../pages/admin/home/Quanly/UserAdmin/UserAdmin";
 
 function AdminDashboard({ activeComponent }) {
@@ -14,6 +15,8 @@ function AdminDashboard({ activeComponent }) {
         return <UserAdmin />;
       case "danhmuc":
         return <DanhMucAdmin />;
+      case "thietbi":
+        return <ThietBiAdmin />;
     }
   };
 

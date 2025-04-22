@@ -8,7 +8,10 @@ import routerPhong from "./routers/phongTro";
 import routeDichVu from "./routers/dichVu";
 import routerThang from "./routers/HoaDonThangRouter";
 import schedule from "node-schedule";
-import { tuDongTaoHoaDon, tuDongTaoHoaDonThang } from "./controllers/HoaDonTungThangController";
+import {
+  tuDongTaoHoaDon,
+  tuDongTaoHoaDonThang,
+} from "./controllers/HoaDonTungThangController";
 import routeHoaDon from "./routers/hoaDon";
 import routerAdmin from "./routers/adminRouter";
 import YeuThichRouter from "./routers/yeuThich";
@@ -37,7 +40,7 @@ app.use("/auth", userRouter);
 app.use("/phongTro", routerPhong);
 app.use("/hoadon", routeHoaDon);
 app.use("/yeu-thich", YeuThichRouter);
-app.use("/thiet-bi", ThietBiRouter)
+app.use("/thiet-bi", ThietBiRouter);
 app.use("/dich-vu", routeDichVu);
 app.use("/hoa-don-thang", routerThang);
 app.use("/danh_gia", routerDanhGia);
@@ -52,7 +55,7 @@ const connectDB = async () => {
 
 schedule.scheduleJob("59 23 * * *", () => {
   tuDongTaoHoaDonThang(), tuDongTaoHoaDon();
- });
+});
 
 connectDB()
   .then(() => {

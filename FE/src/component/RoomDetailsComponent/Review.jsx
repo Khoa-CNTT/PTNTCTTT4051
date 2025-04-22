@@ -132,7 +132,7 @@ function ReviewItem({ review, fetchReviews }) {
       console.error("Lỗi khi xóa bình luận:", error);
     }
   };
-  console.log("review", review);
+
   return (
     <div className="mb-4 p-4 border rounded-lg bg-gray-50">
       <div className="">

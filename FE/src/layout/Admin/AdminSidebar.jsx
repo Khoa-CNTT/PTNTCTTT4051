@@ -50,6 +50,7 @@ export default function AdminSidebar({ setActiveComponent, activeComponent }) {
         { key: "phongtro", label: "Quản lý phòng" },
         { key: "adminuser", label: "Quản lý User" },
         { key: "danhmuc", label: "Quản lý Danh Mục" },
+        { key: "thietbi", label: "Quản lý Thiết Bị" },
       ],
     },
   ];
