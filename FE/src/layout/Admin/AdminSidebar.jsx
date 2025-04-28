@@ -34,6 +34,13 @@ export default function AdminSidebar({ setActiveComponent, activeComponent }) {
   // Danh sách items menu
   const menuItems = [
     {
+      key: "quyen",
+      label: "Phân quyền",
+      icon: (
+        <MdOutlineAdminPanelSettings className="2xl:text-xl text-sm transition-transform duration-300 hover:rotate-12" />
+      ),
+    },
+    {
       key: "admin",
       label: "Acc Admin",
       icon: (
@@ -51,7 +58,21 @@ export default function AdminSidebar({ setActiveComponent, activeComponent }) {
         { key: "adminuser", label: "Quản lý User" },
         { key: "danhmuc", label: "Quản lý Danh Mục" },
         { key: "thietbi", label: "Quản lý Thiết Bị" },
+        { key: "dichvu", label: "Quản lý dịch vụ" },
+        { key: "hoadoncoc", label: "Quản lý hóa đơn cọc" },
+        { key: "hopdong", label: "Quản lý hợp đồng" },
+        { key: "suachua", label: "Quản lý sửa chữa" },
+        { key: "hoadonthang", label: "Quản lý hóa đơn tháng" },
+        { key: "anhphong", label: "Quản lý Ảnh Phòng" },
+        { key: "yeuthich", label: "Quản lý Yêu Thích" },
       ],
+    },
+    {
+      key: "map",
+      label: "Bản đồ",
+      icon: (
+        <FaMap className="2xl:text-xl text-sm transition-transform duration-300 hover:rotate-12" />
+      ),
     },
   ];
 
