@@ -17,6 +17,7 @@ import routerAdmin from "./routers/adminRouter";
 import YeuThichRouter from "./routers/yeuThich";
 import ThietBiRouter from "./routers/thietBi";
 import routerDanhGia from "./routers/danhGia";
+import mapRoutes from "./routers/map";
 
 dotenv.config();
 
@@ -44,6 +45,8 @@ app.use("/thiet-bi", ThietBiRouter);
 app.use("/dich-vu", routeDichVu);
 app.use("/hoa-don-thang", routerThang);
 app.use("/danh_gia", routerDanhGia);
+app.use("/map", mapRoutes);
+
 const connectDB = async () => {
   try {
     await mongoose.connect(dbURL);
