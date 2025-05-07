@@ -22,4 +22,32 @@ export class ImageService {
       new: true,
     });
   }
+  // Lấy danh sách tất cả hình ảnh
+  async getAllImages(): Promise<any[]> {
+    // Sử dụng `find()` để lấy tất cả dữ liệu hình ảnh
+    const images = await HinhAnhPhongModel.find();
+
+    // Trả về kết quả
+    return images;
+  }
+
+  // Xóa tất cả hình ảnh
+  async deleteAllImages(): Promise<void> {
+    // Sử dụng `deleteMany()` để xóa toàn bộ dữ liệu hình ảnh
+    await HinhAnhPhongModel.deleteMany();
+  }
+
+  // Xóa hình ảnh theo ID
+  async deleteImageById(body: any): Promise<void> {
+    const { id } = body;
+
+    // Kiểm tra hình ảnh cần xóa có tồn tại không
+    const image = await HinhAnhPhongModel.findById(id);
+    if (!image) {
+      throw new Error("Hình ảnh không tồn tại");
+    }
+
+    // Xóa hình ảnh
+    await HinhAnhPhongModel.findByIdAndDelete(id);
+  }
 }

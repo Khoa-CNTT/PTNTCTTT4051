@@ -33,8 +33,55 @@ const updateImage = async (req: Request, res: Response) => {
     });
   }
 };
+const getAllImages = async (req: Request, res: Response) => {
+  try {
+    const images = await imageService.getAllImages();
 
+    res.status(200).json({
+      status: "200",
+      data: images,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+const deleteAllImages = async (req: Request, res: Response) => {
+  try {
+    await imageService.deleteAllImages();
+
+    res.status(200).json({
+      status: "200",
+      message: "Tất cả hình ảnh đã được xóa thành công!",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+const deleteImageById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    await imageService.deleteImageById({ id });
+
+    res.status(200).json({
+      status: "200",
+      message: "Hình ảnh đã được xóa thành công!",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
 export {
   createImage,
-  updateImage
+  updateImage,
+  getAllImages,
+  deleteAllImages,
+  deleteImageById,
 };
