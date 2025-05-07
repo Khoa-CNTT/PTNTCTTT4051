@@ -7,6 +7,7 @@ import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { logout } from "../../Store/filterUser";
 import { motion, AnimatePresence } from "framer-motion";
+import { axiosInstance } from "../../../Axios";
 
 const Item = [
   {
@@ -31,8 +32,29 @@ function Header() {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [modal, setModal] = useState(false);
-
+  useEffect(() => {
+    const fetchUser = async () => {
+      dispatch(setLoading(true));
+      try {
+        const res = await axiosInstance.get("/auth/me");
+        dispatch(
+          login({
+            user: res.data.data,
+          })
+        );
+      } catch (error) {
+        console.log(
+          "Không thể lấy thông tin user:",
+          error.response?.data?.message
+        );
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
+    fetchUser();
+  }, []);
   const handleLogout = async () => {
+    await axiosInstance.post("/auth/logout");
     dispatch(logout());
     navigate("/");
   };
