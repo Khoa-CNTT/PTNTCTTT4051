@@ -23,3 +23,58 @@ export const deleteYeuThich = async (req: any, res: any) => {
     });
   }
 };
+
+export const getDataYeuThich = async (req: any, res: any) => {
+  try {
+    const { id_user } = req.params;
+
+    const data = await yeuThichService.getDataYeuTich(id_user);
+
+    res.status(200).json({
+      status: "200",
+      data: data,
+    });
+  } catch (error: any) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
+};
+
+export const getALLYeuThich = async (req: any, res: any) => {
+  try {
+    const data = await yeuThichService.getAllYeuTich();
+
+    res.status(200).json({
+      status: "200",
+      data: data,
+    });
+  } catch (error: any) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
+};
+
+export const getThichPhong = async (req: any, res: any) => {
+  try {
+    const { ma_phong } = req.query;
+    const { id_user } = req.params;
+    if (!id_user || !ma_phong) {
+      return res
+        .status(400)
+        .json({ message: "Thiếu thông tin id_user hoặc ma_phong" });
+    }
+
+    const isFavourite = await yeuThichService.isYeuThich(
+      id_user,
+      ma_phong as string
+    );
+
+    res.status(200).json({ isFavourite });
+  } catch (error) {
+    res.status(404).json({
+      message: error,
+    });
+  }
+};
