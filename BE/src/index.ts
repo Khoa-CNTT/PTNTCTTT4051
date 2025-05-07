@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 import userRouter from "./routers/user";
 import cors from "cors";
 import { createServer } from "http";
-import routerPhong from "./routers/phongTro";
+import danhMucRouter from "./routers/danhMuc";
+import routerPhong from "./routers/phongTro"
 import routeDichVu from "./routers/dichVu";
 import routerThang from "./routers/HoaDonThangRouter";
 import schedule from "node-schedule";
@@ -18,6 +19,13 @@ import YeuThichRouter from "./routers/yeuThich";
 import ThietBiRouter from "./routers/thietBi";
 import routerDanhGia from "./routers/danhGia";
 import mapRoutes from "./routers/map";
+import routerSuaChua from "./routers/SuaChua";
+import RouteQuyen from "./routers/quyen";
+import routerHopDong from "./routers/hopdong";
+import QuyenChucNangRouter from "./routers/quyenChucNang";
+import routeImage from "./routers/Image";
+import { saveEndOfDayData } from "./controllers/electricityController";
+import routerSearch from "./routers/Search";
 
 dotenv.config();
 
@@ -39,6 +47,7 @@ app.use("/admin", routerAdmin);
 
 app.use("/auth", userRouter);
 app.use("/phongTro", routerPhong);
+app.use("/danh-muc", danhMucRouter);
 app.use("/hoadon", routeHoaDon);
 app.use("/yeu-thich", YeuThichRouter);
 app.use("/thiet-bi", ThietBiRouter);
@@ -46,6 +55,17 @@ app.use("/dich-vu", routeDichVu);
 app.use("/hoa-don-thang", routerThang);
 app.use("/danh_gia", routerDanhGia);
 app.use("/map", mapRoutes);
+app.use("/phan_quyen", RouteQuyen);
+app.use("/danh_gia", routerDanhGia);
+app.use("/hoadon", routeHoaDon);
+
+app.use("/quyenchucnang", QuyenChucNangRouter);
+app.use("/hopdong", routerHopDong);
+app.use("/Image-phong", routeImage);
+app.use("/hoa-don-thang", routerThang);
+
+app.use("/api", routerSearch);
+app.use("/sua_chua", routerSuaChua);
 
 const connectDB = async () => {
   try {
@@ -55,6 +75,11 @@ const connectDB = async () => {
     console.log(`Can not connect to db ${error}`);
   }
 };
+
+// Lưu dữ liệu cuối ngày
+schedule.scheduleJob("10 22 * * *", saveEndOfDayData);
+//*:Phút (0 - 59) *:Giờ (0 - 23) *:Ngày trong (tháng (1 - 31)) *:Tháng (1 - 12)    *:Ngày trong tuần (0 - 7) (Chủ nhật có thể là 0 hoặc 7)
+
 
 schedule.scheduleJob("59 23 * * *", () => {
   tuDongTaoHoaDonThang(), tuDongTaoHoaDon();
