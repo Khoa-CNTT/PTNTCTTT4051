@@ -9,6 +9,9 @@ import HoadonCocAdmin from "../../pages/admin/home/Quanly/HoadonCocAdmin";
 import HopDongAdmin from "../../pages/admin/home/Quanly/HopDongAdmin";
 import AnhPhongAdmin from "../../pages/admin/home/Quanly/AnhPhongAdmin";
 import DichvuAdmin from "../../pages/admin/home/Quanly/dichvuAdmin";
+import ThongKeYeuThich from "../../pages/admin/home/Chart/thongKeYeuthich";
+import ChartAdmin from "../../pages/admin/home/Chart/thongKeDienNang";
+import ThongKeDanhGia from "../../pages/admin/home/Chart/thongKeDanhGia";
 function AdminDashboard({ activeComponent }) {
   const renderComponent = () => {
     switch (activeComponent) {
@@ -36,6 +39,12 @@ function AdminDashboard({ activeComponent }) {
         return <SuachuaAdmin />;
       case "map":
         return <MapAdmin />;
+      case "thongkeYeuthich":
+        return <ThongKeYeuThich />;
+      case "thongkeDien":
+        return <ChartAdmin />;
+      case "thongkeDanhgia":
+        return <ThongKeDanhGia />;
     }
   };
 
