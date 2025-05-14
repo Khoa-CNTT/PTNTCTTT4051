@@ -74,6 +74,18 @@ export default function AdminSidebar({ setActiveComponent, activeComponent }) {
         <FaMap className="2xl:text-xl text-sm transition-transform duration-300 hover:rotate-12" />
       ),
     },
+    {
+      key: "thongke",
+      label: "Thống Kê",
+      icon: (
+        <MdOutlineAdminPanelSettings className="2xl:text-xl text-sm transition-transform duration-300 hover:rotate-12" />
+      ),
+      children: [
+        { key: "thongkeDanhgia", label: "Thống kê đánh giá" },
+        { key: "thongkeYeuthich", label: "Thống kê yêu thích" },
+        { key: "thongkeDien", label: "Thống kê Điện tiêu thụ" },
+      ],
+    },
   ];
 
   return (
