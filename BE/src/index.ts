@@ -26,6 +26,7 @@ import QuyenChucNangRouter from "./routers/quyenChucNang";
 import routeImage from "./routers/Image";
 import { saveEndOfDayData } from "./controllers/electricityController";
 import routerSearch from "./routers/Search";
+import OtpRouter from "./routers/otp";
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ app.use("/quyenchucnang", QuyenChucNangRouter);
 app.use("/hopdong", routerHopDong);
 app.use("/Image-phong", routeImage);
 app.use("/hoa-don-thang", routerThang);
+app.use("/Otp", OtpRouter);
 
 app.use("/api", routerSearch);
 app.use("/sua_chua", routerSuaChua);
